@@ -1,28 +1,28 @@
-REMIX DEFAULT WORKSPACE
+# ProfileCreator dApp on Linea Test Network 🔗
 
-Remix default workspace is present when:
-i. Remix loads for the very first time 
-ii. A new workspace is created with 'Default' template
-iii. There are no files existing in the File Explorer
+This project aims to build a user profile on the Linea Test network. This repo create a profile with 2 strings input and retrieves your profile’s data using your MetaMask address. 
 
-This workspace contains 3 directories:
+**Why Linea?**
 
-1. 'contracts': Holds three contracts with increasing levels of complexity.
-2. 'scripts': Contains four typescript files to deploy a contract. It is explained below.
-3. 'tests': Contains one Solidity test file for 'Ballot' contract & one JS test file for 'Storage' contract.
+Linea is a layer 2 blockchain built on top of Ethereum. It leverages zk-rollup technology, which means it has higher transaction speed and reduces costs. 
 
-SCRIPTS
+This repo runs on the Linea’ testnet: Linea Sepolia. The main difference between testnet and mainet is we will be  two is the former uses “fake” ETH to develop your project (hence the name test), whereas the latter uses real ETH. 💸
 
-The 'scripts' folder has four typescript files which help to deploy the 'Storage' contract using 'web3.js' and 'ethers.js' libraries.
+### 🧱 Requirements
 
-For the deployment of any other contract, just update the contract's name from 'Storage' to the desired contract and provide constructor arguments accordingly 
-in the file `deploy_with_ethers.ts` or  `deploy_with_web3.ts`
+1. Create (or Log into) your [MetaMask account.](https://metamask.io/)
+2. Click on “Show Test Network” category and select Linea Sepolia Network.
+3. Get some free ETH from faucets. You can find these at [Infura](https://www.infura.io/faucet/linea), [Covalent,](https://www.covalenthq.com/faucet/) [GetBlock](https://getblock.io/faucet/linea-sepolia/) or [HackQuest](https://www.hackquest.io/en/faucets/59141).
 
-In the 'tests' folder there is a script containing Mocha-Chai unit tests for 'Storage' contract.
+### 🎮 Set up
 
-To run a script, right click on file name in the file explorer and click 'Run'. Remember, Solidity file must already be compiled.
-Output from script will appear in remix terminal.
+Our contract has been built on Remix, and you can leverage this Contract directly on Remix. Alternatively, you can aim to run it locally. 
 
-Please note, require/import is supported in a limited manner for Remix supported modules.
-For now, modules supported by Remix are ethers, web3, swarmgw, chai, multihashes, remix and hardhat only for hardhat.ethers object/plugin.
-For unsupported modules, an error like this will be thrown: '<module_name> module require is not supported by Remix IDE' will be shown.
+To run the frontend’s `index.html` you need to install lite-server.
+
+```html
+npm install -g lite-server
+lite-server
+```
+
+You can find a full breakdown of the codebase and how to run it in this [article](https://dev.to/fernandezbaptiste/building-your-first-dapp-on-linea-in-under-10-min-f13).
