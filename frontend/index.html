@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Profile Creator dApp</title>
+        <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+                type="application/javascript"></script>
+    </head>
+<body>
+    <h1>Profile Creator dApp</h1>
+    <div>
+        <h2>Create Profile</h2>
+        <input type="text" id="username" placeholder="Enter your username">
+        <input type="email" id="email" placeholder="Enter your email">
+        <button onclick="createProfile()">Create Profile</button>
+    </div>
+    <div>
+        <h2>Get Profile</h2>
+        <input type="text" id="userAddress" placeholder="Enter user address">
+        <button onclick="getProfile()">Get Profile</button>
+        <p id="profileInfo"></p>
+    </div>
+    <script>
+        console.log('Ethers:', ethers);
+        const contractAddress = '0xf59D603eD029294aE8eA1F138ee42656641955B5';
+        const contractABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_username",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_email",
+				"type": "string"
+			}
+		],
+		"name": "createProfile",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "username",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
+			}
+		],
+		"name": "ProfileCreated",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "getProfile",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "username",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "email",
+						"type": "string"
+					}
+				],
+				"internalType": "struct ProfileCreator.Profile",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "profiles",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "username",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+
+        async function connect() {
+            if (typeof window.ethereum !== 'undefined') {
+                await ethereum.request({ method: 'eth_requestAccounts' });
+                return new ethers.providers.Web3Provider(window.ethereum); 
+            } else {
+                alert('MetaMask is not installed!');
+                throw new Error('MetaMask not found');
+            }
+        }
+        async function createProfile() {
+            const provider = await connect();
+            const signer = provider.getSigner();
+            const contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+
+            try {
+                const tx = await contract.createProfile(username, email);
+                await tx.wait();
+                alert('Profile created successfully!');
+            } catch (error) {
+                console.error('Error creating profile:', error);
+                alert('Failed to create profile.');
+            }
+        }
+
+        async function getProfile() {
+            const provider = await connect();
+            const contract = new ethers.Contract(contractAddress, contractABI, provider);
+            const userAddress = document.getElementById('userAddress').value;
+
+            try {
+                const profile = await contract.getProfile(userAddress);
+                console.log("This is profile 0:", profile[0], "This is profile 1:",profile[1])
+                document.getElementById('profileInfo').innerText = `Username: ${profile[0]}, Email: ${profile[1]}`;
+            } catch (error) {
+                console.error('Error getting profile:', error);
+                alert('Failed to retrieve profile.');
+            }
+        }
+    </script>
+</body>
+</html>
